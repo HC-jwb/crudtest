@@ -21,6 +21,15 @@
 	margin: 10px 50px;
 }
 
+td {
+	width: auto;
+}
+
+td.min {
+	width: 1%;
+	white-space: nowrap;
+}
+
 </style>
 </head>
 <body>
@@ -35,7 +44,7 @@
 		<div class="ui huge form">
 			<div class="two fields">
 				<div class="field" id="userNameField">
-					<label>유저이름 </label> <input placeholder="Use Name" type="text" name="userName">
+					<label>이름 </label> <input placeholder="Use Name" type="text" name="userName">
 				</div>
 				<div class="field" id="userIdField">
 					<label>아이디 </label> <input placeholder="User Id" type="text" name="userId">
@@ -46,9 +55,9 @@
 		<table class="ui table celled compact" id="crudTalbeList">
 			<thead>
 				<tr>
-					<th>고유식별번호</th>
-					<th>유저이름</th>
-					<th>아이디</th>
+					<th style="text-align:center;">#</th>
+					<th style="text-align:center;">이름</th>
+					<th style="text-align:center;">아이디</th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -56,13 +65,13 @@
 			<tbody>
 				<c:forEach items="${crudList}" var="crudList" varStatus="stat">
 					<tr data-id="${crudList.id}">
-						<td>${crudList.id}</td>
-						<td class="userNameTd">${crudList.userName}</td>
-						<td class="userIdTd">${crudList.userId}</td>
-						<td style="text-align: center;" class="collapse"><div class="ui compact small delete button">
+						<td class="min" style="text-align:center;">${crudList.id}</td>
+						<td class="userNameTd" style="text-align:center;">${crudList.userName}</td>
+						<td class="userIdTd" style="text-align:center;">${crudList.userId}</td>
+						<td class="min"><div class="ui compact small delete button">
 								<i class="trash icon"></i>
 							</div></td>
-						<td style="text-align: center;"><div class="ui compact small edit button">
+						<td class="min"><div class="ui compact small edit button">
 								<i class="edit icon"></i>
 							</div></td>
 
@@ -145,9 +154,10 @@
 					CrudApi.editCrud(changedUserName, changedUserId, crudId, function(response) {
 						if (response) {
 							console.log("crud edit response = " + response);
+							window.location.reload();
 						}
 					}) 
-					window.location.reload();
+					
 				}
 				
 				console.log("edit button clicked");
