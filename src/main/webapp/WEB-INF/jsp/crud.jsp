@@ -29,7 +29,6 @@ td.min {
 	width: 1%;
 	white-space: nowrap;
 }
-
 </style>
 </head>
 <body>
@@ -44,20 +43,54 @@ td.min {
 		<div class="ui huge form">
 			<div class="two fields">
 				<div class="field" id="userNameField">
-					<label>이름 </label> <input placeholder="Use Name" type="text" name="userName">
+					<label>이름 </label> <input placeholder="Use Name" type="text"
+						name="userName">
 				</div>
 				<div class="field" id="userIdField">
-					<label>아이디 </label> <input placeholder="User Id" type="text" name="userId">
+					<label>아이디 </label> <input placeholder="User Id" type="text"
+						name="userId">
 				</div>
 			</div>
 			<div class="ui blue add button">ADD</div>
+			<div class="pagination-radio-set" style="margin: 15px 0 0 0; float: right;">
+				<div class="ui form">
+					<div class="inline fields">
+					
+						<label>Row per Page</label>
+						<div class="field">
+							<div class="ui radio checkbox" id="five-pages">
+								<input type="radio" name="frequency" checked="checked">
+								<label>5</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox" id="ten-pages">
+								<input type="radio" name="frequency"> <label>
+									10</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox" id="fifteen-pages">
+								<input type="radio" name="frequency"> <label>
+									15</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox" id="twenty-pages">
+								<input type="radio" name="frequency"> <label>
+									20</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<table class="ui table celled compact" id="crudTalbeList">
 			<thead>
 				<tr>
-					<th style="text-align:center;">#</th>
-					<th style="text-align:center;">이름</th>
-					<th style="text-align:center;">아이디</th>
+					<th style="text-align: center;">#</th>
+					<th style="text-align: center;">이름</th>
+					<th style="text-align: center;">아이디</th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -65,9 +98,9 @@ td.min {
 			<tbody>
 				<c:forEach items="${crudList}" var="crudList" varStatus="stat">
 					<tr data-id="${crudList.id}">
-						<td class="min" style="text-align:center;">${crudList.id}</td>
-						<td class="userNameTd" style="text-align:center;">${crudList.userName}</td>
-						<td class="userIdTd" style="text-align:center;">${crudList.userId}</td>
+						<td class="min" style="text-align: center;">${crudList.id}</td>
+						<td class="userNameTd" style="text-align: center;">${crudList.userName}</td>
+						<td class="userIdTd" style="text-align: center;">${crudList.userId}</td>
 						<td class="min"><div class="ui compact small delete button">
 								<i class="trash icon"></i>
 							</div></td>
@@ -78,12 +111,15 @@ td.min {
 					</tr>
 				</c:forEach>
 			</tbody>
-			
-		</table>
-		<br>
-		<br>
-		<br>
 
+		</table>
+		<br> <br> <br>
+		<center>
+			<div class="ui pagination menu">
+				<a class="active item"> 1 </a> <a class="item"> 2 </a> <a
+					class="item"> 3 </a> <a class="item"> 4 </a>
+			</div>
+		</center>
 	</div>
 
 	<script type="text/javascript">
@@ -94,8 +130,7 @@ td.min {
 					alert("삭제됨!");
 					var $this = $(this);
 					var crudId = $this.closest("tr").data("id");
-					
-					
+
 					CrudApi.deleteCrud(crudId, function(response) {
 						if (response) {
 							console.log("crud delete response = " + response);
@@ -110,58 +145,84 @@ td.min {
 		});
 
 		$(function() {
-			$(".ui.add.button").click(function() {
-				console.log("add button clicked");
-				var userName = $("#userNameField").find('input[name="userName"]').val();
-				var userId = $("#userIdField").find('input[name="userId"]').val();
-				
-				CrudApi.insertCrud(userName, userId, function(response) {
-					if (response) {
-						console.log("crud insert response = " + response);
-						window.location.reload(); //reload하여 수정된 결과를 출력
-					}
-				})
-				
-			});
+			$(".ui.add.button").click(
+					function() {
+						console.log("add button clicked");
+						var userName = $("#userNameField").find(
+								'input[name="userName"]').val();
+						var userId = $("#userIdField").find(
+								'input[name="userId"]').val();
+
+						CrudApi.insertCrud(userName, userId,
+								function(response) {
+									if (response) {
+										console.log("crud insert response = "
+												+ response);
+										window.location.reload(); //reload하여 수정된 결과를 출력
+									}
+								})
+
+					});
 		});
-		
+
 		$(function() {
-			$(".ui.edit.button").click(function() {
-				var $this = $(this);
-				var crudId = $this.closest("tr").data("id");
-				
-				var $userNameTd = $this.closest("tr").find('td[class="userNameTd"]');
-				var $userIdTd = $this.closest("tr").find('td[class="userIdTd"]');
-				
-				if($this.find('i').hasClass("edit")) {
-					var currentUserName = $userNameTd.text();
-					var currentUserId = $userIdTd.text();
-					
-					$this.find('i').removeClass("edit").addClass("save");	
-					
-					$userNameTd.text('');
-					$userIdTd.text('');
-					$userNameTd.append('<input placeholder="User Name" type="text" name="td-userName">');
-					$userIdTd.append('<input placeholder="User Id" type="text" name="td-userId">');
-					$userNameTd.find('input[name="td-userName"]').val(currentUserName);
-					$userIdTd.find('input[name="td-userId"]').val(currentUserId);
-						
-				} else {
-					var changedUserName = $userNameTd.find('input[name="td-userName"]').val();
-					var changedUserId =	$userIdTd.find('input[name="td-userId"]').val();
-					$this.find('i').removeClass("save").addClass("edit");
-					
-					CrudApi.editCrud(changedUserName, changedUserId, crudId, function(response) {
-						if (response) {
-							console.log("crud edit response = " + response);
-							window.location.reload();
-						}
-					}) 
-					
-				}
-				
-				console.log("edit button clicked");
-			});
+			$(".ui.edit.button")
+					.click(
+							function() {
+								var $this = $(this);
+								var crudId = $this.closest("tr").data("id");
+
+								var $userNameTd = $this.closest("tr").find(
+										'td[class="userNameTd"]');
+								var $userIdTd = $this.closest("tr").find(
+										'td[class="userIdTd"]');
+
+								if ($this.find('i').hasClass("edit")) {
+									var currentUserName = $userNameTd.text();
+									var currentUserId = $userIdTd.text();
+
+									$this.find('i').removeClass("edit")
+											.addClass("save");
+
+									$userNameTd.text('');
+									$userIdTd.text('');
+									$userNameTd
+											.append('<input placeholder="User Name" type="text" name="td-userName">');
+									$userIdTd
+											.append('<input placeholder="User Id" type="text" name="td-userId">');
+									$userNameTd.find(
+											'input[name="td-userName"]').val(
+											currentUserName);
+									$userIdTd.find('input[name="td-userId"]')
+											.val(currentUserId);
+
+								} else {
+									var changedUserName = $userNameTd.find(
+											'input[name="td-userName"]').val();
+									var changedUserId = $userIdTd.find(
+											'input[name="td-userId"]').val();
+									$this.find('i').removeClass("save")
+											.addClass("edit");
+
+									CrudApi
+											.editCrud(
+													changedUserName,
+													changedUserId,
+													crudId,
+													function(response) {
+														if (response) {
+															console
+																	.log("crud edit response = "
+																			+ response);
+															window.location
+																	.reload();
+														}
+													})
+
+								}
+
+								console.log("edit button clicked");
+							});
 		});
 
 		var CrudApi = {
@@ -175,11 +236,14 @@ td.min {
 			},
 			insertCrud : function(userName, userId, callback) {
 				console.log("CrudApi.insertCrud test");
-				Api.sendGet(ApiURL.crudBase + '/insert/' + userName + '/' + userId, callback);
+				Api.sendGet(ApiURL.crudBase + '/insert/' + userName + '/'
+						+ userId, callback);
 			},
-			editCrud : function(changedUserName, changedUserId, crudId, callback) {
+			editCrud : function(changedUserName, changedUserId, crudId,
+					callback) {
 				console.log("CrudApi.editCrud test");
-				Api.sendGet(ApiURL.crudBase + '/edit/' + changedUserName + '/' + changedUserId + '/' + crudId, callback);
+				Api.sendGet(ApiURL.crudBase + '/edit/' + changedUserName + '/'
+						+ changedUserId + '/' + crudId, callback);
 			}
 		};
 
