@@ -27,4 +27,35 @@ public class RestApiController{
 		return response;
 	}
 
+	
+	
+	@RequestMapping("/insert/{userName}/{userId}")
+	public ResponseContainer<Void> insertData(@PathVariable("userName") String userName, @PathVariable("userId") String userId) {
+		ResponseContainer<Void> response = new ResponseContainer<>(); 
+		try {
+			System.out.println("userName=" + userName);
+			System.out.println("userId=" + userId);
+			
+			crudService.insertData(userName, userId);
+			response.setSuccess(true);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return response;
+	}
+	
+	@RequestMapping("/edit/{changedUserName}/{changedUserId}/{crudId}") 
+	public ResponseContainer<Void> editData(@PathVariable("changedUserName") String changedUserName, @PathVariable("changedUserId") String changedUserId, @PathVariable("crudId") Long id) {
+		ResponseContainer<Void> response = new ResponseContainer<>();
+		try {
+			System.out.println("changedUserName=" + changedUserName);
+			System.out.println("changedUserId=" + changedUserId);
+			
+			crudService.editData(changedUserName, changedUserId, id);
+			response.setSuccess(true);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return response;
+	}
 }
