@@ -8,5 +8,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Pagination {
-	private int rowsPerPage = 5;
+	
+	int rowsPerPage = 10;
+	int currPage = 0;
+	
+	
+	
 }

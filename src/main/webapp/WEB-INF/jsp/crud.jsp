@@ -54,32 +54,31 @@ td.min {
 			<div class="ui blue add button">ADD</div>
 			<div class="pagination-radio-set"
 				style="margin: 15px 0 0 0; float: right;">
-				<div class="ui form">
+				<div class="ui form" id="rowsPerPage">
 					<div class="inline fields">
-
 						<label>Rows per Page</label>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="five-pages">
-								<input type="radio" name="pagination-name" id="input-five-pages"
-									checked="checked"> <label>5</label>
+								<input type="radio" value="5" name="pagination-name" id="input-five-pages"
+									${pnav.rowsPerPage eq 5 ? "checked='checked'":""}> <label>5</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="ten-pages">
-								<input type="radio" name="pagination-name" id="input-ten-pages">
+								<input type="radio" value="10" name="pagination-name" id="input-ten-pages" ${pnav.rowsPerPage eq 10 ? "checked='checked'":""}>
 								<label>10</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="fifteen-pages">
-								<input type="radio" name="pagination-name"
-									id="input-fifteen-pages"> <label>15</label>
+								<input type="radio" value="15" name="pagination-name"
+									id="input-fifteen-pages" ${pnav.rowsPerPage eq 15 ? "checked='checked'":""}> <label>15</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="twenty-pages">
-								<input type="radio" name="pagination-name"
-									id="input-twenty-pages"> <label>20</label>
+								<input type="radio" value="20" name="pagination-name"
+									id="input-twenty-pages" ${pnav.rowsPerPage eq 20 ? "checked='checked'":""}> <label>20</label>
 							</div>
 						</div>
 					</div>
@@ -125,51 +124,22 @@ td.min {
 	</div>
 
 	<script type="text/javascript">
+		var $rowsPerPage;
+		var pagination = {rowsPerPage: ${pnav.rowsPerPage}, pageNo:${pnav.currPage}}
 		$(function() {
-			var rowsPerPage = 5;
+			$rowsPerPage = $("#rowsPerPage");
 			
-			$("#input-five-pages").click(function(){
-				rowsPerPage = 5
-				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
-					if (response) {
-						console.log("Send Rows Per Page response = " + response);
-						window.location.reload();
-					}
-				})
-			})	
-			
-			$("#input-ten-pages").click(function(){
-				rowsPerPage = 10;
-				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
-					if (response) {
-						console.log("Send Rows Per Page response = " + response);
-						window.location.reload();
-					}
-				})
-			})	
-			
-			$("#input-fifteen-pages").click(function(){
-				rowPerPage = 15;
-				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
-					if (response) {
-						console.log("Send Rows Per Page response = " + response);
-						window.location.reload();
-					}
-				})
-			})	
-			
-			$("#input-twenty-pages").click(function(){
-				rowsPerPage = 20;
-				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
-					if (response) {
-						console.log("Send Rows Per Page response = " + response);
-						window.location.reload();
-					}
-				})
-			})	
+			$rowsPerPage.find(".ui.radio.checkbox").checkbox({
+				onChecked: function() {
+					var newRowsPerPage = $(this).val();
+					pagination.pageNo = 0;
+					pagination.rowsPerPage = newRowsPerPage;
+					console.log(newRowsPerPage);
+	/* 				loadPagingURI(); */
+				}
+			})
 		});
-	
-	
+
 		$(function() {
 			$("#crudTableList").find("tr .ui.delete.button").click(function() {//삭제버튼 클릭 시
 				//Api.init();
@@ -291,13 +261,13 @@ td.min {
 						+ changedUserId + '/' + crudId, callback);
 			}
 		};
-		
-		var PaginationApi = {
+
+		/* var PaginationApi = {
 			sendRowsPerPage : function(rowsPerPage, callback) {
 				console.log("PaginationApi.sendRowsPerPage test");
 				Api.sendGet(ApiURL.crudBase + '/p/' + rowsPerPage, callback);
-			}	
-		}
+			}
+		} */
 
 		var Api = {
 			// init: function(){

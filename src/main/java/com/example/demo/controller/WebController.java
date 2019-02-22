@@ -20,10 +20,11 @@ public class WebController{
 	@RequestMapping("crud")
 	public String login(Model model) {
 		Pagination pnav = new Pagination();
-		List<Crud> crudList = testRepository.findAllCrudList(pnav);
+		
+		List<Crud> crudList = testRepository.findAllCrudList();
 		System.out.println("crudList id -> " + crudList.get(0).getId());
 		model.addAttribute("crudList", crudList);
-		
+		model.addAttribute("pnav", pnav);
 		return "crud";
 	}
 	
