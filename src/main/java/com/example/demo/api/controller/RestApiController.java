@@ -26,8 +26,6 @@ public class RestApiController{
 				
 		return response;
 	}
-
-	
 	
 	@RequestMapping("/insert/{userName}/{userId}")
 	public ResponseContainer<Void> insertData(@PathVariable("userName") String userName, @PathVariable("userId") String userId) {
@@ -58,4 +56,21 @@ public class RestApiController{
 		}		
 		return response;
 	}
+	
+	
+	@RequestMapping("/p/{pageNo}/{rowsPerPage}") 
+	public ResponseContainer<Void> rowsPerPageData(@PathVariable("rowsPerPage") String rowsPerPage) {
+		ResponseContainer<Void> response = new ResponseContainer<>();
+		try {
+			System.out.println("rowsPerPage = " + rowsPerPage);
+			
+			response.setSuccess(true);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return response;
+	}
+	
+	
 }

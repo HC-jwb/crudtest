@@ -40,7 +40,7 @@ td.min {
 		</div>
 	</div>
 	<div class="main-container">
-		<div class="ui huge form">
+		<div class="ui mini form">
 			<div class="two fields">
 				<div class="field" id="userNameField">
 					<label>이름 </label> <input placeholder="Use Name" type="text"
@@ -52,40 +52,41 @@ td.min {
 				</div>
 			</div>
 			<div class="ui blue add button">ADD</div>
-			<div class="pagination-radio-set" style="margin: 15px 0 0 0; float: right;">
+			<div class="pagination-radio-set"
+				style="margin: 15px 0 0 0; float: right;">
 				<div class="ui form">
 					<div class="inline fields">
-					
-						<label>Row per Page</label>
+
+						<label>Rows per Page</label>
 						<div class="field">
-							<div class="ui radio checkbox" id="five-pages">
-								<input type="radio" name="frequency" checked="checked">
-								<label>5</label>
+							<div class="ui radio checkbox" data-id="five-pages">
+								<input type="radio" name="pagination-name" id="input-five-pages"
+									checked="checked"> <label>5</label>
 							</div>
 						</div>
 						<div class="field">
-							<div class="ui radio checkbox" id="ten-pages">
-								<input type="radio" name="frequency"> <label>
-									10</label>
+							<div class="ui radio checkbox" data-id="ten-pages">
+								<input type="radio" name="pagination-name" id="input-ten-pages">
+								<label>10</label>
 							</div>
 						</div>
 						<div class="field">
-							<div class="ui radio checkbox" id="fifteen-pages">
-								<input type="radio" name="frequency"> <label>
-									15</label>
+							<div class="ui radio checkbox" data-id="fifteen-pages">
+								<input type="radio" name="pagination-name"
+									id="input-fifteen-pages"> <label>15</label>
 							</div>
 						</div>
 						<div class="field">
-							<div class="ui radio checkbox" id="twenty-pages">
-								<input type="radio" name="frequency"> <label>
-									20</label>
+							<div class="ui radio checkbox" data-id="twenty-pages">
+								<input type="radio" name="pagination-name"
+									id="input-twenty-pages"> <label>20</label>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<table class="ui table celled compact" id="crudTalbeList">
+		<table class="ui table celled compact" id="crudTableList">
 			<thead>
 				<tr>
 					<th style="text-align: center;">#</th>
@@ -101,13 +102,14 @@ td.min {
 						<td class="min" style="text-align: center;">${crudList.id}</td>
 						<td class="userNameTd" style="text-align: center;">${crudList.userName}</td>
 						<td class="userIdTd" style="text-align: center;">${crudList.userId}</td>
-						<td class="min"><div class="ui compact small delete button">
+						<td class="min"><div
+								class="ui compact small delete icon button">
 								<i class="trash icon"></i>
 							</div></td>
-						<td class="min"><div class="ui compact small edit button">
+						<td class="min"><div
+								class="ui compact small edit icon button">
 								<i class="edit icon"></i>
 							</div></td>
-
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -124,7 +126,52 @@ td.min {
 
 	<script type="text/javascript">
 		$(function() {
-			$("#crudTalbeList").find("tr .ui.delete.button").click(function() {//삭제버튼 클릭 시
+			var rowsPerPage = 5;
+			
+			$("#input-five-pages").click(function(){
+				rowsPerPage = 5
+				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
+					if (response) {
+						console.log("Send Rows Per Page response = " + response);
+						window.location.reload();
+					}
+				})
+			})	
+			
+			$("#input-ten-pages").click(function(){
+				rowsPerPage = 10;
+				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
+					if (response) {
+						console.log("Send Rows Per Page response = " + response);
+						window.location.reload();
+					}
+				})
+			})	
+			
+			$("#input-fifteen-pages").click(function(){
+				rowPerPage = 15;
+				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
+					if (response) {
+						console.log("Send Rows Per Page response = " + response);
+						window.location.reload();
+					}
+				})
+			})	
+			
+			$("#input-twenty-pages").click(function(){
+				rowsPerPage = 20;
+				PaginationApi.sendRowsPerPage(rowsPerPage, function(response) {
+					if (response) {
+						console.log("Send Rows Per Page response = " + response);
+						window.location.reload();
+					}
+				})
+			})	
+		});
+	
+	
+		$(function() {
+			$("#crudTableList").find("tr .ui.delete.button").click(function() {//삭제버튼 클릭 시
 				//Api.init();
 				if (confirm("정말 삭제하시겠습니까?")) {
 					alert("삭제됨!");
@@ -161,7 +208,6 @@ td.min {
 										window.location.reload(); //reload하여 수정된 결과를 출력
 									}
 								})
-
 					});
 		});
 
@@ -187,9 +233,9 @@ td.min {
 									$userNameTd.text('');
 									$userIdTd.text('');
 									$userNameTd
-											.append('<input placeholder="User Name" type="text" name="td-userName">');
+											.append('<div class="ui fluid input"><input type="text" placeholder="User Name" name="td-userName"></form>');
 									$userIdTd
-											.append('<input placeholder="User Id" type="text" name="td-userId">');
+											.append('<div class="ui fluid input"><input type="text" placeholder="User Id" name="td-userId"></div>');
 									$userNameTd.find(
 											'input[name="td-userName"]').val(
 											currentUserName);
@@ -218,7 +264,6 @@ td.min {
 																	.reload();
 														}
 													})
-
 								}
 
 								console.log("edit button clicked");
@@ -246,6 +291,13 @@ td.min {
 						+ changedUserId + '/' + crudId, callback);
 			}
 		};
+		
+		var PaginationApi = {
+			sendRowsPerPage : function(rowsPerPage, callback) {
+				console.log("PaginationApi.sendRowsPerPage test");
+				Api.sendGet(ApiURL.crudBase + '/p/' + rowsPerPage, callback);
+			}	
+		}
 
 		var Api = {
 			// init: function(){

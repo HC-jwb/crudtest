@@ -7,7 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.model.crud;
+import com.example.demo.domain.Pagination;
+import com.example.demo.model.Crud;
 import com.example.demo.repository.CrudTestRepository;
 
 @Controller
@@ -18,7 +19,8 @@ public class WebController{
 	
 	@RequestMapping("crud")
 	public String login(Model model) {
-		List<crud> crudList = testRepository.findAllCrudList();
+		Pagination pnav = new Pagination();
+		List<Crud> crudList = testRepository.findAllCrudList(pnav);
 		System.out.println("crudList id -> " + crudList.get(0).getId());
 		model.addAttribute("crudList", crudList);
 		

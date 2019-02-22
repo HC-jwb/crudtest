@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @Setter
 @Getter
-public class crud{
+public class Crud{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")

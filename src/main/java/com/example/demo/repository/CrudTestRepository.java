@@ -10,15 +10,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.crud;
+import com.example.demo.model.Crud;
 
 @Repository
-public interface CrudTestRepository extends JpaRepository<crud, Long>{
-	@Query(value="select c from crud c")
-	List<crud> findAllCrudList();
+public interface CrudTestRepository extends JpaRepository<Crud, Long>{
+	@Query(value="select c from Crud c")
+	List<Crud> findAllCrudList();
 	
 	@Modifying
-	@Transactional
+//	@Transactional
 	@Query(value="insert into crud_test (user_name, user_id) VALUES (:userName, :userId)", nativeQuery=true)
 	public void insertData(@Param("userName") String userName, @Param("userId") String userId);
 	
