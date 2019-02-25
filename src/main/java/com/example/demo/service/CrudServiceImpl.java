@@ -30,4 +30,11 @@ public class CrudServiceImpl implements CrudService{
 		System.out.println("in editData of CrudServiceimpl");
 		crudTestRepository.editData(changedUserName, changedUserId, id);
 	}
+	
+	public int getTotalRows() {
+		System.out.println("in getTotalRows()");
+		return crudTestRepository.getTotalRows();
+	}
+	
+	
 }

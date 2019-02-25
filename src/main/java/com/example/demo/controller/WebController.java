@@ -5,26 +5,45 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.domain.Pagination;
 import com.example.demo.model.Crud;
 import com.example.demo.repository.CrudTestRepository;
+import com.example.demo.service.CrudService;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("crud")
 public class WebController{
 	@Autowired
 	CrudTestRepository testRepository;
 	
-	@RequestMapping("crud")
+	@Autowired
+	CrudService crudService;
+	
+	@RequestMapping("")
 	public String login(Model model) {
-		Pagination pnav = new Pagination();
 		
 		List<Crud> crudList = testRepository.findAllCrudList();
 		System.out.println("crudList id -> " + crudList.get(0).getId());
 		model.addAttribute("crudList", crudList);
-		model.addAttribute("pnav", pnav);
+		model.addAttribute("pnav", new Pagination(10, 0, (int) testRepository.count()));
+		return "crud";
+	}
+	
+	@GetMapping("/p/{pageNo}/{rowsPerPage}") 
+	public String pageNoAndrowsPerPageAData(Model model, @PathVariable("pageNo") int pageNo, @PathVariable("rowsPerPage") int rowsPerPage) {
+		System.out.print("in WebController");
+//		ResponseContainer<Void> response = new ResponseContainer<>();
+		try {
+			System.out.println("rowsPerPage = " + rowsPerPage);
+			Pagination pnav = new Pagination(rowsPerPage, pageNo, (int) testRepository.count());
+			model.addAttribute("pnav", pnav);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
 		return "crud";
 	}
 	

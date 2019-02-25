@@ -2,8 +2,6 @@ package com.example.demo.repository;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,6 +31,7 @@ public interface CrudTestRepository extends JpaRepository<Crud, Long>{
 	@Query(value="update crud_test set user_name=:changedUserName, user_id=:changedUserId where id = :editId", nativeQuery=true)
 	public void editData(@Param("changedUserName") String changedUserName, @Param("changedUserId") String changedUserId, @Param("editId") Long id);
 	
-	
+	@Query(value="select count(*) from crud_test", nativeQuery=true)
+	public int getTotalRows();
 	
 }

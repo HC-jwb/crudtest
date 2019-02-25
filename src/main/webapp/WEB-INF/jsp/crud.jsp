@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 
@@ -117,29 +118,37 @@ td.min {
 		<br> <br> <br>
 		<center>
 			<div class="ui pagination menu">
-				<a class="active item"> 1 </a> <a class="item"> 2 </a> <a
-					class="item"> 3 </a> <a class="item"> 4 </a>
+			<c:forEach begin="1" end="${pnav.pageCount}" var="iterator">
+				<a class="item";><c:out value="${iterator}"/> </a> 
+			</c:forEach>
 			</div>
 		</center>
 	</div>
 
 	<script type="text/javascript">
+		var countVariable = 0;
 		var $rowsPerPage;
-		var pagination = {rowsPerPage: ${pnav.rowsPerPage}, pageNo:${pnav.currPage}}
+		var pagination = {rowsPerPage: ${pnav.rowsPerPage}, pageNo: ${pnav.currPage}, pageCount: ${pnav.pageCount}}; 
+		/*  var pagination = {rowsPerPage: 3, pageNo: 4}; */ 
 		$(function() {
 			$rowsPerPage = $("#rowsPerPage");
-			
 			$rowsPerPage.find(".ui.radio.checkbox").checkbox({
 				onChecked: function() {
 					var newRowsPerPage = $(this).val();
 					pagination.pageNo = 0;
 					pagination.rowsPerPage = newRowsPerPage;
 					console.log(newRowsPerPage);
-	/* 				loadPagingURI(); */
+	 				loadPagingURI(); 
 				}
 			})
 		});
 
+		function loadPagingURI() {
+			var uri = '/crud/p/' + pagination.pageNo + '/' + pagination.rowsPerPage;
+			window.location.replace(uri);
+			console.log("in loadPagingURI")
+		}
+		
 		$(function() {
 			$("#crudTableList").find("tr .ui.delete.button").click(function() {//삭제버튼 클릭 시
 				//Api.init();
@@ -157,7 +166,6 @@ td.min {
 				} else {
 					alert("삭제취소!");
 				}
-
 			});
 		});
 
