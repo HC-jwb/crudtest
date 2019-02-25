@@ -1,8 +1,4 @@
-package com.example.demo.domain;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.example.demo.repository.CrudTestRepository;
+package com.example.demo.domain.util;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Pagination {
-	
 	int rowsPerPage = 10;
 	int currPage = 0;
 	int pageCount = 0;

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.ResponseContainer;
-import com.example.demo.repository.CrudTestRepository;
 import com.example.demo.service.CrudService;
 
 @RestController
@@ -14,7 +13,6 @@ import com.example.demo.service.CrudService;
 public class RestApiController{
 	@Autowired
 	private CrudService crudService;
-	
 	
 	@RequestMapping("/delete/{crudId}")
 	public ResponseContainer<Void> deleteData(@PathVariable("crudId") Long id) {
@@ -25,7 +23,6 @@ public class RestApiController{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-				
 		return response;
 	}
 	
@@ -58,6 +55,7 @@ public class RestApiController{
 		}		
 		return response;
 	}
+	
 
 	
 	

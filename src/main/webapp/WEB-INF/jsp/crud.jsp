@@ -36,7 +36,7 @@ td.min {
 	<div class="ui menu inverted pink secondary main">
 		<div class="ui container">
 			<div class="active item">
-				<a href="#"><i class="book large icon"></i>crud</a>
+				<a href="#"><i class="book large icon"></i>Test</a>
 			</div>
 		</div>
 	</div>
@@ -60,26 +60,30 @@ td.min {
 						<label>Rows per Page</label>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="five-pages">
-								<input type="radio" value="5" name="pagination-name" id="input-five-pages"
+								<input type="radio" value="5" name="pagination-name"
+									id="input-five-pages"
 									${pnav.rowsPerPage eq 5 ? "checked='checked'":""}> <label>5</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="ten-pages">
-								<input type="radio" value="10" name="pagination-name" id="input-ten-pages" ${pnav.rowsPerPage eq 10 ? "checked='checked'":""}>
-								<label>10</label>
+								<input type="radio" value="10" name="pagination-name"
+									id="input-ten-pages"
+									${pnav.rowsPerPage eq 10 ? "checked='checked'":""}> <label>10</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="fifteen-pages">
 								<input type="radio" value="15" name="pagination-name"
-									id="input-fifteen-pages" ${pnav.rowsPerPage eq 15 ? "checked='checked'":""}> <label>15</label>
+									id="input-fifteen-pages"
+									${pnav.rowsPerPage eq 15 ? "checked='checked'":""}> <label>15</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox" data-id="twenty-pages">
 								<input type="radio" value="20" name="pagination-name"
-									id="input-twenty-pages" ${pnav.rowsPerPage eq 20 ? "checked='checked'":""}> <label>20</label>
+									id="input-twenty-pages"
+									${pnav.rowsPerPage eq 20 ? "checked='checked'":""}> <label>20</label>
 							</div>
 						</div>
 					</div>
@@ -99,7 +103,7 @@ td.min {
 			<tbody>
 				<c:forEach items="${crudList}" var="crudList" varStatus="stat">
 					<tr data-id="${crudList.id}">
-						<td class="min" style="text-align: center;">${crudList.id}</td>
+						<td class="min" style="text-align: center;">${pnav.currPage*pnav.rowsPerPage+stat.count}</td>
 						<td class="userNameTd" style="text-align: center;">${crudList.userName}</td>
 						<td class="userIdTd" style="text-align: center;">${crudList.userId}</td>
 						<td class="min"><div
@@ -113,20 +117,28 @@ td.min {
 					</tr>
 				</c:forEach>
 			</tbody>
-
 		</table>
 		<br> <br> <br>
+
 		<center>
-			<div class="ui pagination menu">
-			<c:forEach begin="1" end="${pnav.pageCount}" var="iterator">
-				<a class="item";><c:out value="${iterator}"/> </a> 
-			</c:forEach>
+			<div class="untitled">
+				<a class="button" href="/crud"> <i
+					class="angle double left big icon" href="/crud"></i>
+				</a>
+				<div class="ui pagination menu">
+					<c:forEach begin="1" end="${pnav.pageCount}" var="iterator">
+						<a class="item" ; href="/crud/p/${iterator-1}/${pnav.rowsPerPage}")><c:out
+								value="${iterator}" /> </a>
+					</c:forEach>
+				</div>
+				<a class="button" href="/crud"> <i
+					class="angle double right big icon"></i>
+				</a>
 			</div>
 		</center>
 	</div>
 
 	<script type="text/javascript">
-		var countVariable = 0;
 		var $rowsPerPage;
 		var pagination = {rowsPerPage: ${pnav.rowsPerPage}, pageNo: ${pnav.currPage}, pageCount: ${pnav.pageCount}}; 
 		/*  var pagination = {rowsPerPage: 3, pageNo: 4}; */ 
