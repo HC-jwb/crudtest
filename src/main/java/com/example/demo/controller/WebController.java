@@ -28,7 +28,6 @@ public class WebController{
 	
 	@RequestMapping("")
 	public String login(Model model) {
-		
 //		List<Crud> crudList = testRepository.findAllCrudList();
 		List<Crud> crudList = testRepository.findAll();
 		System.out.println("crudList id -> " + crudList.get(0).getId());
@@ -46,7 +45,7 @@ public class WebController{
 //		ResponseContainer<Void> response = new ResponseContainer<>();
 		try {
 			System.out.println("rowsPerPage = " + rowsPerPage);
-			Pagination pnav = new Pagination(rowsPerPage, pageNo, 16);
+			Pagination pnav = new Pagination(rowsPerPage, pageNo,(int) testRepository.count() );
 			model.addAttribute("crudList", crudListInPage);
 			model.addAttribute("pnav", pnav);
 		} catch(Exception e) {
@@ -54,5 +53,5 @@ public class WebController{
 		}		
 		return "crud";
 	}
-	
 }
+

@@ -22,6 +22,14 @@
 	margin: 10px 50px;
 }
 
+a.disabled {
+	cursor: default;
+}
+
+a.disabled i.icon {
+	color: gray;
+}
+
 td {
 	width: auto;
 }
@@ -118,51 +126,43 @@ td.min {
 				</c:forEach>
 			</tbody>
 		</table>
-		<br> <br> <br>
-
-		<center>
-			<div class="untitled">
-				<a class="button" href="/crud"> <i
-					class="angle double left big icon" href="/crud"></i>
-				</a>
-				<div class="ui pagination menu">
-					<c:forEach begin="1" end="${pnav.pageCount}" var="iterator">
-						<a class="item" ; href="/crud/p/${iterator-1}/${pnav.rowsPerPage}")><c:out
-								value="${iterator}" /> </a>
-					</c:forEach>
+		<c:if test="${pnav.pageCount gt 0}">
+			<div class="pagination-container"
+				style="text-align: center; margin-top: 2.2em;">
+				<div class="untitled">
+					<a class="${pnav.startPage eq 1 ? 'disabled': ''}"
+						href="/crud/p/${pnav.startPage - 2}/${pnav.rowsPerPage}">
+						<i class="angle double left big icon" id="leftPagesArrow"></i>
+					</a>
+					<div class="ui pagination menu">
+						<c:forEach begin="${pnav.startPage}" end="${pnav.endPage}"
+							var="iterator">
+							<a class="item ${pnav.currPage + 1 eq iterator ? 'active' : ''}"
+								href="/crud/p/${iterator-1}/${pnav.rowsPerPage}")><c:out
+									value="${iterator}" /> </a>
+						</c:forEach>
+					</div>
+					<a class="${pnav.endPage eq pnav.pageCount ? 'disabled' : ''}"
+						href="/crud/p/${pnav.endPage}/${pnav.rowsPerPage}"> <i
+						class="angle double right big icon" id="rightPagesArrow"></i>
+					</a>
 				</div>
-				<a class="button" href="/crud"> <i
-					class="angle double right big icon"></i>
-				</a>
 			</div>
-		</center>
+		</c:if>
 	</div>
 
 	<script type="text/javascript">
-		var $rowsPerPage;
-		var pagination = {rowsPerPage: ${pnav.rowsPerPage}, pageNo: ${pnav.currPage}, pageCount: ${pnav.pageCount}}; 
-		/*  var pagination = {rowsPerPage: 3, pageNo: 4}; */ 
-		$(function() {
-			$rowsPerPage = $("#rowsPerPage");
-			$rowsPerPage.find(".ui.radio.checkbox").checkbox({
-				onChecked: function() {
-					var newRowsPerPage = $(this).val();
-					pagination.pageNo = 0;
-					pagination.rowsPerPage = newRowsPerPage;
-					console.log(newRowsPerPage);
-	 				loadPagingURI(); 
-				}
-			})
-		});
 
-		function loadPagingURI() {
-			var uri = '/crud/p/' + pagination.pageNo + '/' + pagination.rowsPerPage;
-			window.location.replace(uri);
-			console.log("in loadPagingURI")
-		}
-		
-		$(function() {
-			$("#crudTableList").find("tr .ui.delete.button").click(function() {//삭제버튼 클릭 시
+		var $rowsPerPage;
+		var pagination = 
+		{
+			rowsPerPage: ${pnav.rowsPerPage}, 
+			pageNo: ${pnav.currPage}, 
+			pageCount: ${pnav.pageCount}
+		}; 
+
+	$(function() {
+		$("#crudTableList").find("tr .ui.delete.button").click(function() {//삭제버튼 클릭 시
 				//Api.init();
 				if (confirm("정말 삭제하시겠습니까?")) {
 					alert("삭제됨!");
@@ -177,13 +177,25 @@ td.min {
 					});
 				} else {
 					alert("삭제취소!");
+					console.log(${pnav.startPage});
 				}
-			});
 		});
 
-		$(function() {
-			$(".ui.add.button").click(
-					function() {
+			$("a.disabled").click(function() {return false;});
+			
+			$rowsPerPage = $("#rowsPerPage");
+			$rowsPerPage.find(".ui.radio.checkbox").checkbox({
+				onChecked: function() {
+					var newRowsPerPage = $(this).val();
+					pagination.pageNo = 0;
+					pagination.rowsPerPage = newRowsPerPage;
+					console.log(newRowsPerPage);
+	 				loadPagingURI(); 
+				}
+			})
+			
+			
+			$(".ui.add.button").click(function() {
 						console.log("add button clicked");
 						var userName = $("#userNameField").find(
 								'input[name="userName"]').val();
@@ -199,11 +211,10 @@ td.min {
 									}
 								})
 					});
-		});
+	
 
-		$(function() {
-			$(".ui.edit.button")
-					.click(
+	
+			$(".ui.edit.button").click(
 							function() {
 								var $this = $(this);
 								var crudId = $this.closest("tr").data("id");
@@ -260,6 +271,8 @@ td.min {
 							});
 		});
 
+
+
 		var CrudApi = {
 			errorHandler : function(jqXHR, textStatus, errorText) {
 				alert("communication error!");
@@ -282,12 +295,16 @@ td.min {
 			}
 		};
 
-		/* var PaginationApi = {
-			sendRowsPerPage : function(rowsPerPage, callback) {
-				console.log("PaginationApi.sendRowsPerPage test");
-				Api.sendGet(ApiURL.crudBase + '/p/' + rowsPerPage, callback);
-			}
-		} */
+
+
+
+
+	function loadPagingURI() {
+		var uri = '/crud/p/' + pagination.pageNo + '/' + pagination.rowsPerPage;
+		window.location.replace(uri);
+		console.log("in loadPagingURI")
+	}
+
 
 		var Api = {
 			// init: function(){
@@ -306,7 +323,6 @@ td.min {
 			sendGet : function(url, callback) {
 				$.getJSON(url, callback).fail(
 						function(d, textStatus, error) {
-							//console.log("getJSON failed!");
 							console.error("getJSON failed, status: "
 									+ textStatus + ", error: " + error);
 						}).done(function() {
